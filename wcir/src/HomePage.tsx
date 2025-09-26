@@ -177,7 +177,7 @@ export default function HomePage() {
   const isCalc = route === '/calculator';
 
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-100">
+    <div className="flex min-h-screen flex-col bg-slate-900 text-slate-100">
       {/* Top banner */}
       <div className="w-full bg-slate-950 text-white">
         <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-6 py-3">
@@ -196,7 +196,7 @@ export default function HomePage() {
       </div>
 
       {/* Main content area */}
-      <main className="mx-auto max-w-5xl px-6 py-8">
+      <main className="mx-auto flex max-w-5xl flex-1 items-center justify-center px-6">
         {isCalc ? (
           <CalculatorPage
             showBack

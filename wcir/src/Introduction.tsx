@@ -62,7 +62,9 @@ const Card: React.FC<React.PropsWithChildren<{ className?: string }>> = ({
   children,
   className = '',
 }) => (
-  <div className={`rounded-2xl border border-slate-700 bg-slate-800 p-6 shadow-sm ${className}`}>
+  <div
+    className={`flex flex-col rounded-2xl border border-slate-700 bg-slate-800 p-6 shadow-sm ${className}`}
+  >
     {children}
   </div>
 );
@@ -165,7 +167,7 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
 
       {/* Stepper */}
       {step > 0 && (
-        <section className="mx-auto max-w-3xl px-6 pt-6 pb-10">
+        <section className="mx-auto w-3xl px-6 pt-6 pb-10">
           <div className="mb-4 flex items-center justify-between text-xs text-slate-400">
             <div>Step {step} of 5</div>
             <button className="underline hover:text-slate-200" onClick={() => setStep(0)}>
@@ -174,11 +176,12 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
           </div>
 
           {step === 1 && (
-            <Card>
+            <Card className="min-h-[20rem]">
               <h2 className="text-xl font-semibold">Let’s start with your name (optional)</h2>
               <p className="mt-1 text-sm text-slate-400">
-                I only use this locally to personalize the experience.
+                I only use this to personalize the experience.
               </p>
+
               <div className="mt-4 grid gap-4 sm:grid-cols-2">
                 <Field label="First name">
                   <input
@@ -201,7 +204,8 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
                   </select>
                 </Field>
               </div>
-              <div className="mt-6 flex gap-3">
+
+              <div className="mt-auto flex items-center justify-between gap-3 border-t border-slate-700 pt-6">
                 <button
                   onClick={() => setStep(0)}
                   className="rounded-lg border border-slate-700 bg-slate-800 px-4 py-2"
@@ -219,7 +223,7 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
           )}
 
           {step === 2 && (
-            <Card>
+            <Card className="min-h-[20rem]">
               <h2 className="text-xl font-semibold">What do you have invested today?</h2>
               <div className="mt-4 grid gap-4 sm:grid-cols-2">
                 <Field label="Current investments">
@@ -239,7 +243,9 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
                   />
                 </Field>
               </div>
-              <div className="mt-6 flex gap-3">
+
+              {/* Action bar pinned to bottom of the Card */}
+              <div className="mt-auto flex items-center justify-between gap-3 border-t border-slate-700 pt-6">
                 <button
                   onClick={() => setStep(1)}
                   className="rounded-lg border border-slate-700 bg-slate-800 px-4 py-2"
@@ -257,8 +263,9 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
           )}
 
           {step === 3 && (
-            <Card>
+            <Card className="min-h-[20rem]">
               <h2 className="text-xl font-semibold">Assumptions about returns & inflation</h2>
+
               <div className="mt-4 grid gap-4 sm:grid-cols-3">
                 <Field label="Expected annual return (%)" hint="Before inflation">
                   <input
@@ -282,7 +289,8 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
                   </div>
                 </Field>
               </div>
-              <div className="mt-6 flex gap-3">
+
+              <div className="mt-auto flex items-center justify-between gap-3 border-t border-slate-700 pt-6">
                 <button
                   onClick={() => setStep(2)}
                   className="rounded-lg border border-slate-700 bg-slate-800 px-4 py-2"
@@ -300,8 +308,9 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
           )}
 
           {step === 4 && (
-            <Card>
+            <Card className="min-h-[20rem]">
               <h2 className="text-xl font-semibold">What lifestyle are you funding?</h2>
+
               <div className="mt-4 grid gap-4 sm:grid-cols-3">
                 <Field label="Annual spend in retirement">
                   <input
@@ -325,7 +334,8 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
                   </div>
                 </Field>
               </div>
-              <div className="mt-6 flex gap-3">
+
+              <div className="mt-auto flex items-center justify-between gap-3 border-t border-slate-700 pt-6">
                 <button
                   onClick={() => setStep(3)}
                   className="rounded-lg border border-slate-700 bg-slate-800 px-4 py-2"
@@ -343,7 +353,7 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
           )}
 
           {step === 5 && (
-            <Card>
+            <Card className="min-h-[20rem]">
               <h2 className="text-xl font-semibold">
                 {firstName ? `${firstName}, h` : 'H'}ere’s your rough timeline
               </h2>
@@ -373,7 +383,7 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
                 </div>
               </div>
 
-              <div className="mt-6 flex flex-wrap gap-3">
+              <div className="mt-auto flex flex-wrap items-center justify-between gap-3 border-t border-slate-700 pt-6">
                 <button
                   onClick={() => setStep(4)}
                   className="rounded-lg border border-slate-700 bg-slate-800 px-4 py-2"
