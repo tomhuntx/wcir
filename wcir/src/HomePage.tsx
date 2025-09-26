@@ -120,7 +120,7 @@ export default function HomePage() {
   const [currency, setCurrency] = useState<CurrencyCode>('AUD');
 
   // Inputs gathered step-by-step
-  const [principal, setPrincipal] = useState<number>(10000);
+  const [principal, setPrincipal] = useState<number>(1000);
   const [monthlyContribution, setMonthlyContribution] = useState<number>(500);
   const [nominalReturnPct, setNominalReturnPct] = useState<number>(7);
   const [inflationPct, setInflationPct] = useState<number>(2.5);

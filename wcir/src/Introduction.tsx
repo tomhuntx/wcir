@@ -156,9 +156,9 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
             <Card className="h-full">
               <h3 className="text-xl font-semibold">What this service does</h3>
               <p className="mt-3 text-base text-slate-300">
-                We guide you through a few human-friendly questions, then estimate when your
-                investments could sustainably fund your lifestyle. Everything runs on your device.
-                No accounts. No tracking.
+                This tool will guide you through a few human-friendly questions, then estimate when
+                your investments could sustainably fund your lifestyle. Everything runs on your
+                device. No accounts. No tracking.
               </p>
             </Card>
           </div>
@@ -177,9 +177,9 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
 
           {step === 1 && (
             <Card className="min-h-[20rem]">
-              <h2 className="text-xl font-semibold">Let’s start with your name (optional)</h2>
+              <h2 className="text-xl font-semibold">Let’s start with your name and currency</h2>
               <p className="mt-1 text-sm text-slate-400">
-                I only use this to personalize the experience.
+                I only use this to personalize the experience. Feel free to use any name.
               </p>
 
               <div className="mt-4 grid gap-4 sm:grid-cols-2">
@@ -188,7 +188,7 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
                     value={firstName}
                     onChange={onText}
                     className="w-full rounded-xl border border-slate-600 bg-slate-900 px-3 py-2 text-slate-100"
-                    placeholder="e.g. Tom"
+                    placeholder="Jane Doe"
                   />
                 </Field>
                 <Field label="Currency">
@@ -224,7 +224,9 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
 
           {step === 2 && (
             <Card className="min-h-[20rem]">
-              <h2 className="text-xl font-semibold">What do you have invested today?</h2>
+              <h2 className="text-xl font-semibold">
+                Do you have any current investments or contributions?
+              </h2>
               <div className="mt-4 grid gap-4 sm:grid-cols-2">
                 <Field label="Current investments">
                   <input
