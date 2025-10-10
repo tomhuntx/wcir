@@ -18,10 +18,14 @@ type IntroductionProps = {
   setFirstName: React.Dispatch<React.SetStateAction<string>>;
   currency: CurrencyCode;
   setCurrency: React.Dispatch<React.SetStateAction<CurrencyCode>>;
-  principal: number;
-  setPrincipal: React.Dispatch<React.SetStateAction<number>>;
-  monthlyContribution: number;
-  setMonthlyContribution: React.Dispatch<React.SetStateAction<number>>;
+  savings: number;
+  setSavings: React.Dispatch<React.SetStateAction<number>>;
+  investments: number;
+  setInvestments: React.Dispatch<React.SetStateAction<number>>;
+  contribution: number;
+  setContribution: React.Dispatch<React.SetStateAction<number>>;
+  contributionFrequency: string;
+  setContributionFrequency: React.Dispatch<React.SetStateAction<string>>;
   nominalReturnPct: number;
   setNominalReturnPct: React.Dispatch<React.SetStateAction<number>>;
   inflationPct: number;
@@ -78,10 +82,14 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
     setFirstName,
     currency,
     setCurrency,
-    principal,
-    setPrincipal,
-    monthlyContribution,
-    setMonthlyContribution,
+    savings,
+    setSavings,
+    investments,
+    setInvestments,
+    contribution,
+    setContribution,
+    contributionFrequency,
+    setContributionFrequency,
     nominalReturnPct,
     setNominalReturnPct,
     inflationPct,
@@ -141,8 +149,7 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
               <h3 className="text-xl font-semibold">My Pledge</h3>
               <ul className="mt-3 space-y-2 text-sm text-slate-300">
                 <li>
-                  <strong>Your privacy matters</strong>: I do not collect or sell your personal
-                  information.
+                  <strong>Your privacy matters</strong>: I do not collect your personal information.
                 </li>
                 <li>
                   <strong>Your journey is unique</strong>: Tailor your strategy, risk level, and
@@ -176,7 +183,7 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
           </div>
 
           {step === 1 && (
-            <Card className="min-h-[20rem]">
+            <Card className="h-[21rem]">
               <h2 className="text-xl font-semibold">Let’s start with your name and currency</h2>
               <p className="mt-1 text-sm text-slate-400">
                 I only use this to personalize the experience. Feel free to use any name.
@@ -205,7 +212,7 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
                 </Field>
               </div>
 
-              <div className="mt-auto flex items-center justify-between gap-3 border-t border-slate-700 pt-6">
+              <div className="mt-auto flex items-center justify-between gap-3 pt-6">
                 <button
                   onClick={() => setStep(0)}
                   className="rounded-lg border border-slate-700 bg-slate-800 px-4 py-2"
@@ -223,31 +230,54 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
           )}
 
           {step === 2 && (
-            <Card className="min-h-[20rem]">
+            <Card className="h-[21rem]">
               <h2 className="text-xl font-semibold">
-                Do you have any current investments or contributions?
+                Do you have any current investments or savings?
               </h2>
+              <p className="mt-1 text-sm text-slate-400">
+                I only use this to personalize the experience. Feel free to use any name.
+              </p>
+
+              <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                <Field label="Current savings">
+                  <input
+                    type="number"
+                    value={savings}
+                    onChange={onNumber(setSavings)}
+                    className="w-full rounded-xl border border-slate-600 bg-slate-900 px-3 py-2 text-slate-100"
+                  />
+                </Field>
+                <Field label="Expected annual return (%)">
+                  <input
+                    type="number"
+                    value={nominalReturnPct}
+                    onChange={onNumber(setNominalReturnPct)}
+                    className="w-full rounded-xl border border-slate-600 bg-slate-900 px-3 py-2 text-slate-100"
+                  />
+                </Field>
+              </div>
+
               <div className="mt-4 grid gap-4 sm:grid-cols-2">
                 <Field label="Current investments">
                   <input
                     type="number"
-                    value={principal}
-                    onChange={onNumber(setPrincipal)}
+                    value={investments}
+                    onChange={onNumber(setInvestments)}
                     className="w-full rounded-xl border border-slate-600 bg-slate-900 px-3 py-2 text-slate-100"
                   />
                 </Field>
-                <Field label="Monthly contribution">
+                <Field label="Expected annual return (%)">
                   <input
                     type="number"
-                    value={monthlyContribution}
-                    onChange={onNumber(setMonthlyContribution)}
+                    value={nominalReturnPct}
+                    onChange={onNumber(setNominalReturnPct)}
                     className="w-full rounded-xl border border-slate-600 bg-slate-900 px-3 py-2 text-slate-100"
                   />
                 </Field>
               </div>
 
               {/* Action bar pinned to bottom of the Card */}
-              <div className="mt-auto flex items-center justify-between gap-3 border-t border-slate-700 pt-6">
+              <div className="mt-auto flex items-center justify-between gap-3 pt-6">
                 <button
                   onClick={() => setStep(1)}
                   className="rounded-lg border border-slate-700 bg-slate-800 px-4 py-2"
@@ -265,34 +295,32 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
           )}
 
           {step === 3 && (
-            <Card className="min-h-[20rem]">
-              <h2 className="text-xl font-semibold">Assumptions about returns & inflation</h2>
+            <Card className="h-[21rem]">
+              <h2 className="text-xl font-semibold">Income & expenses</h2>
 
-              <div className="mt-4 grid gap-4 sm:grid-cols-3">
-                <Field label="Expected annual return (%)" hint="Before inflation">
-                  <input
-                    type="number"
-                    value={nominalReturnPct}
-                    onChange={onNumber(setNominalReturnPct)}
-                    className="w-full rounded-xl border border-slate-600 bg-slate-900 px-3 py-2 text-slate-100"
-                  />
+              <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                <Field label="Contribution amount">
+                    <input
+                      type="number"
+                      value={contribution}
+                      onChange={onNumber(setContribution)}
+                      className="w-full rounded-xl border border-slate-600 bg-slate-900 px-3 py-2 text-slate-100"
+                    />
                 </Field>
-                <Field label="Inflation (%)">
-                  <input
-                    type="number"
-                    value={inflationPct}
-                    onChange={onNumber(setInflationPct)}
-                    className="w-full rounded-xl border border-slate-600 bg-slate-900 px-3 py-2 text-slate-100"
-                  />
-                </Field>
-                <Field label="Real return (auto)" hint="After inflation">
-                  <div className="rounded-xl border border-slate-600 bg-slate-900 px-3 py-2 text-slate-100">
-                    {percent(realR)}
-                  </div>
+                <Field label="Contribution frequency">
+                    <select
+                      value={contributionFrequency}
+                      onChange={(e) => setContributionFrequency(e.target.value)}
+                      className="w-full rounded-xl border border-slate-600 bg-slate-900 px-3 py-2 text-slate-100"
+                    >
+                      <option value="weekly">Weekly</option>
+                      <option value="fortnightly">Fortnightly</option>
+                      <option value="monthly">Monthly</option>
+                    </select>
                 </Field>
               </div>
 
-              <div className="mt-auto flex items-center justify-between gap-3 border-t border-slate-700 pt-6">
+              <div className="mt-auto flex items-center justify-between gap-3 pt-6">
                 <button
                   onClick={() => setStep(2)}
                   className="rounded-lg border border-slate-700 bg-slate-800 px-4 py-2"
@@ -310,7 +338,7 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
           )}
 
           {step === 4 && (
-            <Card className="min-h-[20rem]">
+            <Card className="h-[21rem]">
               <h2 className="text-xl font-semibold">What lifestyle are you funding?</h2>
 
               <div className="mt-4 grid gap-4 sm:grid-cols-3">
@@ -330,14 +358,14 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
                     className="w-full rounded-xl border border-slate-600 bg-slate-900 px-3 py-2 text-slate-100"
                   />
                 </Field>
-                <Field label="Target nest egg (auto)">
+                <Field label="Target (in today's dollars)">
                   <div className="rounded-xl border border-slate-600 bg-slate-900 px-3 py-2 text-slate-100">
                     {currencyFormat(targetNestEgg, currency)}
                   </div>
                 </Field>
               </div>
 
-              <div className="mt-auto flex items-center justify-between gap-3 border-t border-slate-700 pt-6">
+              <div className="mt-auto flex items-center justify-between gap-3 pt-6">
                 <button
                   onClick={() => setStep(3)}
                   className="rounded-lg border border-slate-700 bg-slate-800 px-4 py-2"
@@ -355,7 +383,7 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
           )}
 
           {step === 5 && (
-            <Card className="min-h-[20rem]">
+            <Card className="h-[21rem]">
               <h2 className="text-xl font-semibold">
                 {firstName ? `${firstName}, h` : 'H'}ere’s your rough timeline
               </h2>
@@ -385,12 +413,12 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
                 </div>
               </div>
 
-              <div className="mt-auto flex flex-wrap items-center justify-between gap-3 border-t border-slate-700 pt-6">
+              <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-6">
                 <button
                   onClick={() => setStep(4)}
                   className="rounded-lg border border-slate-700 bg-slate-800 px-4 py-2"
                 >
-                  Adjust inputs
+                  Back
                 </button>
                 <button
                   onClick={() => (window.location.hash = '#/calculator')}

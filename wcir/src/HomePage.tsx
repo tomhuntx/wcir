@@ -11,7 +11,7 @@ type CurrencyCode = 'AUD' | 'USD' | 'EUR' | 'GBP';
 
 interface TargetParams {
   principal: number;
-  monthlyContribution: number;
+  contribution: number;
   annualRealReturnDecimal: number; // e.g. 0.05 for 5%
   targetAmount: number;
   maxYears?: number;
@@ -69,7 +69,7 @@ function realReturn(nominalPct: number, inflPct: number): number {
 
 function yearsToTarget({
   principal,
-  monthlyContribution,
+  contribution,
   annualRealReturnDecimal,
   targetAmount,
   maxYears = 100,
@@ -81,7 +81,7 @@ function yearsToTarget({
 
   while (balance < targetAmount && months < maxMonths) {
     balance *= 1 + monthlyRate;
-    balance += monthlyContribution;
+    balance += contribution;
     months++;
   }
 
@@ -120,12 +120,22 @@ export default function HomePage() {
   const [currency, setCurrency] = useState<CurrencyCode>('AUD');
 
   // Inputs gathered step-by-step
-  const [principal, setPrincipal] = useState<number>(1000);
-  const [monthlyContribution, setMonthlyContribution] = useState<number>(500);
-  const [nominalReturnPct, setNominalReturnPct] = useState<number>(7);
+  const [principal, setPrincipal] = useState<number>(0);
+  const [investments, setInvestments] = useState<number>(0);
+  const [savings, setSavings] = useState<number>(0);
+  const [contribution, setContribution] = useState<number>(500);
+  const [contributionFrequency, setContributionFrequency] = useState<string>("monthly");
+  const [nominalReturnPct, setNominalReturnPct] = useState<number>(8);
   const [inflationPct, setInflationPct] = useState<number>(2.5);
   const [annualSpend, setAnnualSpend] = useState<number>(40000);
   const [withdrawalPct, setWithdrawalPct] = useState<number>(4);
+
+  // Override principle if investments or savings is set
+  useEffect(() => {
+    if (investments > 0 || savings > 0) {
+      setPrincipal(0);
+    }
+  }, [investments, savings]);
 
   // Derived
   const targetNestEgg = useMemo<number>(() => {
@@ -142,11 +152,11 @@ export default function HomePage() {
     () =>
       yearsToTarget({
         principal: principal || 0,
-        monthlyContribution: monthlyContribution || 0,
+        contribution: contribution || 0,
         annualRealReturnDecimal: realR,
         targetAmount: targetNestEgg,
       }),
-    [principal, monthlyContribution, realR, targetNestEgg],
+    [principal, contribution, realR, targetNestEgg],
   );
 
   const etaDate = useMemo<string>(() => {
@@ -156,8 +166,8 @@ export default function HomePage() {
   }, [projection.months]);
 
   const totalInvested = useMemo<number>(
-    () => (principal || 0) + (monthlyContribution || 0) * projection.months,
-    [principal, monthlyContribution, projection.months],
+    () => (principal || 0) + (contribution || 0) * projection.months,
+    [principal, contribution, projection.months],
   );
 
   // Typed handlers
@@ -188,9 +198,9 @@ export default function HomePage() {
             <span className="font-semibold tracking-tight">{appName}</span>
           </div>
           <div className="flex items-center gap-2 text-xs sm:text-sm">
-            <InfoBadge>No AI</InfoBadge>
-            <InfoBadge>No personal data</InfoBadge>
-            <InfoBadge>Local calculations</InfoBadge>
+            <InfoBadge>Data stays on your device</InfoBadge>
+            <InfoBadge>No tracking</InfoBadge>
+            <InfoBadge>No signup required</InfoBadge>
           </div>
         </div>
       </div>
@@ -207,10 +217,10 @@ export default function HomePage() {
             }}
             currency={currency}
             setCurrency={setCurrency}
-            principal={principal}
+            principal={principal || (savings + investments)}
             setPrincipal={setPrincipal}
-            monthlyContribution={monthlyContribution}
-            setMonthlyContribution={setMonthlyContribution}
+            contribution={contribution}
+            setContribution={setContribution}
             nominalReturnPct={nominalReturnPct}
             setNominalReturnPct={setNominalReturnPct}
             inflationPct={inflationPct}
@@ -235,10 +245,14 @@ export default function HomePage() {
             setFirstName={setFirstName}
             currency={currency}
             setCurrency={setCurrency}
-            principal={principal}
-            setPrincipal={setPrincipal}
-            monthlyContribution={monthlyContribution}
-            setMonthlyContribution={setMonthlyContribution}
+            savings={savings}
+            setSavings={setSavings}
+            investments={investments}
+            setInvestments={setInvestments}
+            contribution={contribution}
+            setContribution={setContribution}
+            contributionFrequency={contributionFrequency}
+            setContributionFrequency={setContributionFrequency}
             nominalReturnPct={nominalReturnPct}
             setNominalReturnPct={setNominalReturnPct}
             inflationPct={inflationPct}

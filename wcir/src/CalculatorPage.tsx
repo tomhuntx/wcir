@@ -25,8 +25,8 @@ export interface CalculatorPageProps {
   principal: number;
   setPrincipal: React.Dispatch<React.SetStateAction<number>>;
 
-  monthlyContribution: number;
-  setMonthlyContribution: React.Dispatch<React.SetStateAction<number>>;
+  contribution: number;
+  setContribution: React.Dispatch<React.SetStateAction<number>>;
 
   nominalReturnPct: number;
   setNominalReturnPct: React.Dispatch<React.SetStateAction<number>>;
@@ -86,7 +86,7 @@ export function CalculatorPage(p: CalculatorPageProps) {
   const { showBack = false, title = 'Full Calculator' } = p;
 
   return (
-    <section className="mx-auto max-w-5xl px-6 py-8">
+    <section className="mx-auto w-3xl px-6 py-8">
       {/* small header row inside content */}
       <div className="mb-4 flex items-center justify-between">
         {showBack ? (
@@ -121,8 +121,8 @@ export function CalculatorPage(p: CalculatorPageProps) {
             <input
               type="number"
               className="w-full rounded-xl border border-slate-600 bg-slate-900 px-3 py-2 text-slate-100"
-              value={p.monthlyContribution}
-              onChange={p.onNumber(p.setMonthlyContribution)}
+              value={p.contribution}
+              onChange={p.onNumber(p.setContribution)}
             />
           </Field>
 
@@ -179,7 +179,7 @@ export function CalculatorPage(p: CalculatorPageProps) {
         {/* Results */}
         <div className="mt-6 grid gap-3 sm:grid-cols-3">
           <div className="rounded-2xl border border-slate-600 bg-slate-900 p-4">
-            <div className="text-sm text-slate-400">Target nest egg</div>
+            <div className="text-sm text-slate-400">Target investment total</div>
             <div className="mt-1 text-2xl font-semibold">
               {currencyFormat(p.targetNestEgg, p.currency)}
             </div>
@@ -194,7 +194,7 @@ export function CalculatorPage(p: CalculatorPageProps) {
           </div>
 
           <div className="rounded-2xl border border-slate-600 bg-slate-900 p-4">
-            <div className="text-sm text-slate-400">Real return (after inflation)</div>
+            <div className="text-sm text-slate-400">Return After Inflation</div>
             <div className="mt-1 text-2xl font-semibold">{percent(p.realR)}</div>
           </div>
         </div>
