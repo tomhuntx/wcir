@@ -28,10 +28,10 @@ export interface CalculatorPageProps {
   contribution: number;
   setContribution: React.Dispatch<React.SetStateAction<number>>;
 
-  nominalReturnPct: number;
-  setNominalReturnPct: React.Dispatch<React.SetStateAction<number>>;
+  nominalReturnPercent: number;
+  setNominalReturnPercent: React.Dispatch<React.SetStateAction<number>>;
 
-  inflationPct: number;
+  inflationPercent: number;
   setInflationPct: React.Dispatch<React.SetStateAction<number>>;
 
   annualSpend: number;
@@ -130,8 +130,8 @@ export function CalculatorPage(p: CalculatorPageProps) {
             <input
               type="number"
               className="w-full rounded-xl border border-slate-600 bg-slate-900 px-3 py-2 text-slate-100"
-              value={p.nominalReturnPct}
-              onChange={p.onNumber(p.setNominalReturnPct)}
+              value={p.nominalReturnPercent}
+              onChange={p.onNumber(p.setNominalReturnPercent)}
             />
           </Field>
 
@@ -139,7 +139,7 @@ export function CalculatorPage(p: CalculatorPageProps) {
             <input
               type="number"
               className="w-full rounded-xl border border-slate-600 bg-slate-900 px-3 py-2 text-slate-100"
-              value={p.inflationPct}
+              value={p.inflationPercent}
               onChange={p.onNumber(p.setInflationPct)}
             />
           </Field>

@@ -121,12 +121,14 @@ export default function HomePage() {
 
   // Inputs gathered step-by-step
   const [principal, setPrincipal] = useState<number>(0);
-  const [investments, setInvestments] = useState<number>(0);
-  const [savings, setSavings] = useState<number>(0);
+  const [investments, setInvestments] = useState<number | null>(0);
+  const [savings, setSavings] = useState<number | null>(0);
+  const [savingsReturnPercent, setSavingsReturnPercent] = useState<number>(3);
+  const [investmentReturnPercent, setInvestmentReturnPercent] = useState<number>(8);
   const [contribution, setContribution] = useState<number>(500);
-  const [contributionFrequency, setContributionFrequency] = useState<string>("monthly");
-  const [nominalReturnPct, setNominalReturnPct] = useState<number>(8);
-  const [inflationPct, setInflationPct] = useState<number>(2.5);
+  const [contributionFrequency, setContributionFrequency] = useState<string>('monthly');
+  const [nominalReturnPercent, setNominalReturnPercent] = useState<number>(8);
+  const [inflationPercent, setInflationPct] = useState<number>(2.5);
   const [annualSpend, setAnnualSpend] = useState<number>(40000);
   const [withdrawalPct, setWithdrawalPct] = useState<number>(4);
 
@@ -137,6 +139,13 @@ export default function HomePage() {
     }
   }, [investments, savings]);
 
+  // Override return percent if investments or savings is set
+  useEffect(() => {
+    if (savingsReturnPercent > 0 || investmentReturnPercent > 0) {
+      setNominalReturnPercent(0);
+    }
+  }, [savingsReturnPercent, investmentReturnPercent]);
+
   // Derived
   const targetNestEgg = useMemo<number>(() => {
     const wr = clampNum(withdrawalPct, 0.1, 10) / 100; // 0.1%..10%
@@ -144,8 +153,8 @@ export default function HomePage() {
   }, [annualSpend, withdrawalPct]);
 
   const realR = useMemo<number>(
-    () => realReturn(nominalReturnPct, inflationPct),
-    [nominalReturnPct, inflationPct],
+    () => realReturn(nominalReturnPercent, inflationPercent),
+    [nominalReturnPercent, inflationPercent],
   );
 
   const projection = useMemo<TargetResult>(
@@ -217,13 +226,15 @@ export default function HomePage() {
             }}
             currency={currency}
             setCurrency={setCurrency}
-            principal={principal || (savings + investments)}
+            principal={principal || savings + investments}
             setPrincipal={setPrincipal}
             contribution={contribution}
             setContribution={setContribution}
-            nominalReturnPct={nominalReturnPct}
-            setNominalReturnPct={setNominalReturnPct}
-            inflationPct={inflationPct}
+            nominalReturnPercent={
+              nominalReturnPercent || savingsReturnPercent + investmentReturnPercent
+            }
+            setNominalReturnPercent={setNominalReturnPercent}
+            inflationPercent={inflationPercent}
             setInflationPct={setInflationPct}
             annualSpend={annualSpend}
             setAnnualSpend={setAnnualSpend}
@@ -249,13 +260,17 @@ export default function HomePage() {
             setSavings={setSavings}
             investments={investments}
             setInvestments={setInvestments}
+            savingsReturnPercent={savingsReturnPercent}
+            setSavingsReturnPercent={setSavingsReturnPercent}
+            investmentReturnPercent={investmentReturnPercent}
+            setInvestmentReturnPercent={setInvestmentReturnPercent}
             contribution={contribution}
             setContribution={setContribution}
             contributionFrequency={contributionFrequency}
             setContributionFrequency={setContributionFrequency}
-            nominalReturnPct={nominalReturnPct}
-            setNominalReturnPct={setNominalReturnPct}
-            inflationPct={inflationPct}
+            nominalReturnPercent={nominalReturnPercent}
+            setNominalReturnPercent={setNominalReturnPercent}
+            inflationPercent={inflationPercent}
             setInflationPct={setInflationPct}
             annualSpend={annualSpend}
             setAnnualSpend={setAnnualSpend}

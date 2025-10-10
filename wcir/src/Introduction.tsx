@@ -22,13 +22,17 @@ type IntroductionProps = {
   setSavings: React.Dispatch<React.SetStateAction<number>>;
   investments: number;
   setInvestments: React.Dispatch<React.SetStateAction<number>>;
+  savingsReturnPercent: number;
+  setSavingsReturnPercent: React.Dispatch<React.SetStateAction<number>>;
+  investmentReturnPercent: number;
+  setInvestmentReturnPercent: React.Dispatch<React.SetStateAction<number>>;
   contribution: number;
   setContribution: React.Dispatch<React.SetStateAction<number>>;
   contributionFrequency: string;
   setContributionFrequency: React.Dispatch<React.SetStateAction<string>>;
-  nominalReturnPct: number;
-  setNominalReturnPct: React.Dispatch<React.SetStateAction<number>>;
-  inflationPct: number;
+  nominalReturnPercent: number;
+  setNominalReturnPercent: React.Dispatch<React.SetStateAction<number>>;
+  inflationPercent: number;
   setInflationPct: React.Dispatch<React.SetStateAction<number>>;
   annualSpend: number;
   setAnnualSpend: React.Dispatch<React.SetStateAction<number>>;
@@ -86,13 +90,17 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
     setSavings,
     investments,
     setInvestments,
+    savingsReturnPercent,
+    setSavingsReturnPercent,
+    investmentReturnPercent,
+    setInvestmentReturnPercent,
     contribution,
     setContribution,
     contributionFrequency,
     setContributionFrequency,
-    nominalReturnPct,
-    setNominalReturnPct,
-    inflationPct,
+    nominalReturnPercent,
+    setNominalReturnPercent,
+    inflationPercent,
     setInflationPct,
     annualSpend,
     setAnnualSpend,
@@ -183,33 +191,45 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
           </div>
 
           {step === 1 && (
-            <Card className="h-[21rem]">
-              <h2 className="text-xl font-semibold">Let’s start with your name and currency</h2>
+            <Card className="h-[18rem]">
+              <h2 className="text-xl font-semibold text-slate-200">
+                Let’s start with your name and currency
+              </h2>
               <p className="mt-1 text-sm text-slate-400">
                 I only use this to personalize the experience. Feel free to use any name.
               </p>
 
-              <div className="mt-4 grid gap-4 sm:grid-cols-2">
-                <Field label="First name">
-                  <input
-                    value={firstName}
-                    onChange={onText}
-                    className="w-full rounded-xl border border-slate-600 bg-slate-900 px-3 py-2 text-slate-100"
-                    placeholder="Jane Doe"
-                  />
-                </Field>
-                <Field label="Currency">
-                  <select
-                    value={currency}
-                    onChange={onCurrency}
-                    className="w-full rounded-xl border border-slate-600 bg-slate-900 px-3 py-2 text-slate-100"
-                  >
-                    <option value="AUD">AUD</option>
-                    <option value="USD">USD</option>
-                    <option value="EUR">EUR</option>
-                    <option value="GBP">GBP</option>
-                  </select>
-                </Field>
+              {/* Inline, human sentence */}
+              <div className="3xl mt-10 flex flex-wrap items-center gap-x-2 gap-y-3 text-xl leading-relaxed text-slate-100">
+                <span>My name is</span>
+
+                <label className="sr-only" htmlFor="firstName">
+                  First name
+                </label>
+                <input
+                  id="firstName"
+                  value={firstName}
+                  onChange={onText}
+                  placeholder="Jane"
+                  className="inline-block w-40 rounded-xl border-0 border-b-2 border-emerald-500 bg-slate-900/50 px-3 py-1 text-inherit focus:ring-0 focus:outline-none"
+                />
+
+                <span>and my currency is</span>
+
+                <label className="sr-only" htmlFor="currency">
+                  Currency
+                </label>
+                <select
+                  id="currency"
+                  value={currency}
+                  onChange={onCurrency}
+                  className="inline-block rounded-xl border-0 border-b-2 border-emerald-500 bg-slate-900/50 px-3 py-1 text-inherit focus:outline-none"
+                >
+                  <option value="AUD">AUD</option>
+                  <option value="USD">USD</option>
+                  <option value="EUR">EUR</option>
+                  <option value="GBP">GBP</option>
+                </select>
               </div>
 
               <div className="mt-auto flex items-center justify-between gap-3 pt-6">
@@ -230,53 +250,52 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
           )}
 
           {step === 2 && (
-            <Card className="h-[21rem]">
-              <h2 className="text-xl font-semibold">
-                Do you have any current investments or savings?
+            <Card className="h-[18rem]">
+              <h2 className="text-sm font-semibold text-slate-400">
+                Your current savings & investments
               </h2>
-              <p className="mt-1 text-sm text-slate-400">
-                I only use this to personalize the experience. Feel free to use any name.
-              </p>
 
-              <div className="mt-4 grid gap-4 sm:grid-cols-2">
-                <Field label="Current savings">
-                  <input
-                    type="number"
-                    value={savings}
-                    onChange={onNumber(setSavings)}
-                    className="w-full rounded-xl border border-slate-600 bg-slate-900 px-3 py-2 text-slate-100"
-                  />
-                </Field>
-                <Field label="Expected annual return (%)">
-                  <input
-                    type="number"
-                    value={nominalReturnPct}
-                    onChange={onNumber(setNominalReturnPct)}
-                    className="w-full rounded-xl border border-slate-600 bg-slate-900 px-3 py-2 text-slate-100"
-                  />
-                </Field>
+              {/* Inline conversational layout */}
+              <div className="mt-4 flex flex-wrap items-baseline gap-x-2 gap-y-3 text-xl leading-relaxed text-slate-100">
+                <span>I currently have</span>
+                <input
+                  type="number"
+                  value={savings}
+                  onChange={onNumber(setSavings)}
+                  placeholder="500"
+                  className="inline-block w-32 rounded-xl border-0 border-b-2 border-emerald-500 bg-slate-900/50 px-3 py-1 text-inherit focus:outline-none"
+                />
+                <span>in savings and</span>
+                <input
+                  type="number"
+                  value={investments}
+                  onChange={onNumber(setInvestments)}
+                  placeholder="1000"
+                  className="inline-block w-32 rounded-xl border-0 border-b-2 border-emerald-500 bg-slate-900/50 px-3 py-1 text-inherit focus:outline-none"
+                />
+                <span>invested.</span>
               </div>
 
-              <div className="mt-4 grid gap-4 sm:grid-cols-2">
-                <Field label="Current investments">
+              <div className="mt-4 flex flex-wrap items-baseline gap-x-2 gap-y-3 text-xl leading-relaxed text-slate-100">
+                <span>
+                  I expect my savings to make
                   <input
                     type="number"
-                    value={investments}
-                    onChange={onNumber(setInvestments)}
-                    className="w-full rounded-xl border border-slate-600 bg-slate-900 px-3 py-2 text-slate-100"
+                    value={savingsReturnPercent}
+                    onChange={(e) => setSavingsReturnPercent(Number(e.target.value))}
+                    className="ml-2 inline-block w-16 rounded-xl border-0 border-b-2 border-emerald-500 bg-slate-900/50 px-3 py-1 text-inherit focus:outline-none"
                   />
-                </Field>
-                <Field label="Expected annual return (%)">
+                  % per year and my investments to make
                   <input
                     type="number"
-                    value={nominalReturnPct}
-                    onChange={onNumber(setNominalReturnPct)}
-                    className="w-full rounded-xl border border-slate-600 bg-slate-900 px-3 py-2 text-slate-100"
+                    value={investmentReturnPercent}
+                    onChange={(e) => setInvestmentReturnPercent(Number(e.target.value))}
+                    className="ml-2 inline-block w-16 rounded-xl border-0 border-b-2 border-emerald-500 bg-slate-900/50 px-3 py-1 text-inherit focus:outline-none"
                   />
-                </Field>
+                  % per year.
+                </span>
               </div>
 
-              {/* Action bar pinned to bottom of the Card */}
               <div className="mt-auto flex items-center justify-between gap-3 pt-6">
                 <button
                   onClick={() => setStep(1)}
@@ -300,23 +319,23 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
 
               <div className="mt-4 grid gap-4 sm:grid-cols-2">
                 <Field label="Contribution amount">
-                    <input
-                      type="number"
-                      value={contribution}
-                      onChange={onNumber(setContribution)}
-                      className="w-full rounded-xl border border-slate-600 bg-slate-900 px-3 py-2 text-slate-100"
-                    />
+                  <input
+                    type="number"
+                    value={contribution}
+                    onChange={onNumber(setContribution)}
+                    className="w-full rounded-xl border border-slate-600 bg-slate-900 px-3 py-2 text-slate-100"
+                  />
                 </Field>
                 <Field label="Contribution frequency">
-                    <select
-                      value={contributionFrequency}
-                      onChange={(e) => setContributionFrequency(e.target.value)}
-                      className="w-full rounded-xl border border-slate-600 bg-slate-900 px-3 py-2 text-slate-100"
-                    >
-                      <option value="weekly">Weekly</option>
-                      <option value="fortnightly">Fortnightly</option>
-                      <option value="monthly">Monthly</option>
-                    </select>
+                  <select
+                    value={contributionFrequency}
+                    onChange={(e) => setContributionFrequency(e.target.value)}
+                    className="w-full rounded-xl border border-slate-600 bg-slate-900 px-3 py-2 text-slate-100"
+                  >
+                    <option value="weekly">Weekly</option>
+                    <option value="fortnightly">Fortnightly</option>
+                    <option value="monthly">Monthly</option>
+                  </select>
                 </Field>
               </div>
 
