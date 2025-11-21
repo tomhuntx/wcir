@@ -20,10 +20,14 @@ type IntroductionProps = {
   setCurrency: React.Dispatch<React.SetStateAction<CurrencyCode>>;
   savings: number;
   setSavings: React.Dispatch<React.SetStateAction<number>>;
+  savingsContribution: number;
+  setSavingsContribution: React.Dispatch<React.SetStateAction<number>>;
   savingsFrequency: string;
   setSavingsFrequency: React.Dispatch<React.SetStateAction<string>>;
   investments: number;
   setInvestments: React.Dispatch<React.SetStateAction<number>>;
+  investmentContribution: number;
+  setInvestmentContribution: React.Dispatch<React.SetStateAction<number>>;
   investmentFrequency: string;
   setInvestmentFrequency: React.Dispatch<React.SetStateAction<string>>;
   savingsReturnPercent: number;
@@ -56,18 +60,6 @@ type IntroductionProps = {
   currencyFormat: (value: number, currency: CurrencyCode) => string;
 };
 
-const Field: React.FC<{ label: string; hint?: string; children: React.ReactNode }> = ({
-  label,
-  hint,
-  children,
-}) => (
-  <label className="block">
-    <div className="text-sm text-slate-300">{label}</div>
-    <div className="mt-1">{children}</div>
-    {hint ? <div className="mt-1 text-xs text-slate-500">{hint}</div> : null}
-  </label>
-);
-
 const Card: React.FC<React.PropsWithChildren<{ className?: string }>> = ({
   children,
   className = '',
@@ -90,10 +82,14 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
     setCurrency,
     savings,
     setSavings,
+    savingsContribution,
+    setSavingsContribution,
     savingsFrequency,
     setSavingsFrequency,
     investments,
     setInvestments,
+    investmentContribution,
+    setInvestmentContribution,
     investmentFrequency,
     setInvestmentFrequency,
     savingsReturnPercent,
@@ -337,8 +333,8 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
                 <span>I set aside</span>
                 <input
                   type="number"
-                  value={savings}
-                  onChange={(e) => setSavings(Number(e.target.value))}
+                  value={savingsContribution}
+                  onChange={(e) => setSavingsContribution(Number(e.target.value))}
                   className="inline-block w-24 rounded-xl border-0 border-b-2 border-emerald-500 bg-slate-900/50 px-3 py-1 text-inherit focus:outline-none"
                 />
                 <span>per</span>
@@ -357,8 +353,8 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
                 <span>I make investment contributions of</span>
                 <input
                   type="number"
-                  value={investments}
-                  onChange={(e) => setInvestments(Number(e.target.value))}
+                  value={investmentContribution}
+                  onChange={(e) => setInvestmentContribution(Number(e.target.value))}
                   className="inline-block w-24 rounded-xl border-0 border-b-2 border-emerald-500 bg-slate-900/50 px-3 py-1 text-inherit focus:outline-none"
                 />
                 <span>per</span>

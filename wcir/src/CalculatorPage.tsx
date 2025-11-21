@@ -112,7 +112,7 @@ export function CalculatorPage(p: CalculatorPageProps) {
             <input
               type="number"
               className="w-full rounded-xl border border-slate-600 bg-slate-900 px-3 py-2 text-slate-100"
-              value={p.principal}
+              value={p.principal.toFixed(0)}
               onChange={p.onNumber(p.setPrincipal)}
             />
           </Field>
@@ -121,7 +121,7 @@ export function CalculatorPage(p: CalculatorPageProps) {
             <input
               type="number"
               className="w-full rounded-xl border border-slate-600 bg-slate-900 px-3 py-2 text-slate-100"
-              value={p.contribution}
+              value={p.contribution.toFixed(0)}
               onChange={p.onNumber(p.setContribution)}
             />
           </Field>

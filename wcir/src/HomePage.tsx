@@ -126,8 +126,10 @@ export default function HomePage() {
   // Inputs gathered step-by-step
   const [principal, setPrincipal] = useState<number>(0);
   const [investments, setInvestments] = useState<number>(0);
+  const [investmentContribution, setInvestmentContribution] = useState<number>(0);
   const [investmentFrequency, setInvestmentFrequency] = useState<string>('monthly');
   const [savings, setSavings] = useState<number>(0);
+  const [savingsContribution, setSavingsContribution] = useState<number>(0);
   const [savingsFrequency, setSavingsFrequency] = useState<string>('monthly');
   const [savingsReturnPercent, setSavingsReturnPercent] = useState<number>(3);
   const [investmentReturnPercent, setInvestmentReturnPercent] = useState<number>(8);
@@ -217,10 +219,14 @@ export default function HomePage() {
   // Drive "Monthly contribution" from the savings/investment contribution inputs (step 3)
   useEffect(() => {
     if (isCalc) return;
-    const monthlyFromSavings = frequencyToMonthly(savings || 0, savingsFrequency);
-    const monthlyFromInvestments = frequencyToMonthly(investments || 0, investmentFrequency);
+    const monthlyFromSavings = frequencyToMonthly(savingsContribution || 0, savingsFrequency);
+    const monthlyFromInvestments = frequencyToMonthly(
+      investmentContribution || 0,
+      investmentFrequency,
+    );
+
     setContribution(monthlyFromSavings + monthlyFromInvestments);
-  }, [savings, investments, savingsFrequency, investmentFrequency, isCalc]);
+  }, [savingsContribution, investmentContribution, savingsFrequency, investmentFrequency, isCalc]);
 
   // Drive "Expected annual return (%)" from savings + investment returns
   useEffect(() => {
@@ -248,7 +254,7 @@ export default function HomePage() {
       {/* Top banner */}
       <div className="w-full bg-slate-950 text-white">
         <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-6 py-3">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2" onClick={() => (window.location.href = '/')}>
             <div className="grid h-7 w-7 place-items-center rounded-xl bg-white/10 font-bold">
               ?
             </div>
@@ -303,10 +309,14 @@ export default function HomePage() {
             setCurrency={setCurrency}
             savings={savings}
             setSavings={setSavings}
+            savingsContribution={savingsContribution}
+            setSavingsContribution={setSavingsContribution}
             savingsFrequency={savingsFrequency}
             setSavingsFrequency={setSavingsFrequency}
             investments={investments}
             setInvestments={setInvestments}
+            investmentContribution={investmentContribution}
+            setInvestmentContribution={setInvestmentContribution}
             investmentFrequency={investmentFrequency}
             setInvestmentFrequency={setInvestmentFrequency}
             savingsReturnPercent={savingsReturnPercent}
