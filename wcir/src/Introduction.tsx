@@ -149,8 +149,8 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
                 </button>
               </div>
               <p className="mt-4 text-xs text-slate-500">
-                This is a tool to help people like myself reach financial freedom and independence
-                from their working obligations.
+                This is a tool to help everyday people like you and me reach financial freedom and
+                independence.
               </p>
             </div>
             <Card className="h-full">
