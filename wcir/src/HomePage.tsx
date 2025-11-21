@@ -121,8 +121,10 @@ export default function HomePage() {
 
   // Inputs gathered step-by-step
   const [principal, setPrincipal] = useState<number>(0);
-  const [investments, setInvestments] = useState<number | null>(0);
-  const [savings, setSavings] = useState<number | null>(0);
+  const [investments, setInvestments] = useState<number>(0);
+  const [investmentFrequency, setInvestmentFrequency] = useState<string>('monthly');
+  const [savings, setSavings] = useState<number>(0);
+  const [savingsFrequency, setSavingsFrequency] = useState<string>('monthly');
   const [savingsReturnPercent, setSavingsReturnPercent] = useState<number>(3);
   const [investmentReturnPercent, setInvestmentReturnPercent] = useState<number>(8);
   const [contribution, setContribution] = useState<number>(500);
@@ -207,9 +209,9 @@ export default function HomePage() {
             <span className="font-semibold tracking-tight">{appName}</span>
           </div>
           <div className="flex items-center gap-2 text-xs sm:text-sm">
-            <InfoBadge>Data stays on your device</InfoBadge>
-            <InfoBadge>No tracking</InfoBadge>
-            <InfoBadge>No signup required</InfoBadge>
+            <InfoBadge>No AI</InfoBadge>
+            <InfoBadge>No email</InfoBadge>
+            <InfoBadge>No signup</InfoBadge>
           </div>
         </div>
       </div>
@@ -258,8 +260,12 @@ export default function HomePage() {
             setCurrency={setCurrency}
             savings={savings}
             setSavings={setSavings}
+            savingsFrequency={savingsFrequency}
+            setSavingsFrequency={setSavingsFrequency}
             investments={investments}
             setInvestments={setInvestments}
+            investmentFrequency={investmentFrequency}
+            setInvestmentFrequency={setInvestmentFrequency}
             savingsReturnPercent={savingsReturnPercent}
             setSavingsReturnPercent={setSavingsReturnPercent}
             investmentReturnPercent={investmentReturnPercent}
