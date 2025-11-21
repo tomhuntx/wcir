@@ -208,7 +208,7 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
                 </label>
                 <input
                   id="firstName"
-                  value={firstName}
+                  value={Number.isNaN(firstName) ? '' : firstName}
                   onChange={onText}
                   placeholder="Jane"
                   className="inline-block w-40 rounded-xl border-0 border-b-2 border-emerald-500 bg-slate-900/50 px-3 py-1 text-inherit focus:ring-0 focus:outline-none"
@@ -221,7 +221,7 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
                 </label>
                 <select
                   id="currency"
-                  value={currency}
+                  value={Number.isNaN(currency) ? '' : currency}
                   onChange={onCurrency}
                   className="inline-block rounded-xl border-0 border-b-2 border-emerald-500 bg-slate-900/50 px-3 py-2 text-inherit focus:outline-none"
                 >
@@ -259,7 +259,7 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
                 <span>I currently have</span>
                 <input
                   type="number"
-                  value={savings}
+                  value={Number.isNaN(savings) ? '' : savings}
                   onChange={onNumber(setSavings)}
                   placeholder="500"
                   className="inline-block w-32 rounded-xl border-0 border-b-2 border-emerald-500 bg-slate-900/50 px-3 py-1 text-inherit focus:outline-none"
@@ -267,7 +267,7 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
                 <span>in savings and</span>
                 <input
                   type="number"
-                  value={investments}
+                  value={Number.isNaN(investments) ? '' : investments}
                   onChange={onNumber(setInvestments)}
                   placeholder="1000"
                   className="inline-block w-32 rounded-xl border-0 border-b-2 border-emerald-500 bg-slate-900/50 px-3 py-1 text-inherit focus:outline-none"
@@ -280,14 +280,14 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
                   I expect my savings to make
                   <input
                     type="number"
-                    value={savingsReturnPercent}
+                    value={Number.isNaN(savingsReturnPercent) ? '' : savingsReturnPercent}
                     onChange={(e) => setSavingsReturnPercent(Number(e.target.value))}
                     className="ml-2 inline-block w-16 rounded-xl border-0 border-b-2 border-emerald-500 bg-slate-900/50 px-3 py-1 text-inherit focus:outline-none"
                   />
                   % of interest per year and my investments to grow an average of
                   <input
                     type="number"
-                    value={investmentReturnPercent}
+                    value={Number.isNaN(investmentReturnPercent) ? '' : investmentReturnPercent}
                     onChange={(e) => setInvestmentReturnPercent(Number(e.target.value))}
                     className="ml-2 inline-block w-16 rounded-xl border-0 border-b-2 border-emerald-500 bg-slate-900/50 px-3 py-1 text-inherit focus:outline-none"
                   />
@@ -322,7 +322,7 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
                 <Field label="Contribution amount">
                   <input
                     type="number"
-                    value={contribution}
+                    value={Number.isNaN(contribution) ? '' : contribution}
                     onChange={onNumber(setContribution)}
                     className="w-full rounded-xl border border-slate-600 bg-slate-900 px-3 py-2 text-slate-100"
                   />
@@ -333,7 +333,7 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
                 <span>I set aside</span>
                 <input
                   type="number"
-                  value={savingsContribution}
+                  value={Number.isNaN(savingsContribution) ? '' : savingsContribution}
                   onChange={(e) => setSavingsContribution(Number(e.target.value))}
                   className="inline-block w-24 rounded-xl border-0 border-b-2 border-emerald-500 bg-slate-900/50 px-3 py-1 text-inherit focus:outline-none"
                 />
@@ -353,7 +353,7 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
                 <span>I make investment contributions of</span>
                 <input
                   type="number"
-                  value={investmentContribution}
+                  value={Number.isNaN(investmentContribution) ? '' : investmentContribution}
                   onChange={(e) => setInvestmentContribution(Number(e.target.value))}
                   className="inline-block w-24 rounded-xl border-0 border-b-2 border-emerald-500 bg-slate-900/50 px-3 py-1 text-inherit focus:outline-none"
                 />
@@ -394,7 +394,7 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
                 <span>I predict my yearly expenses when I retire will be roughly</span>
                 <input
                   type="number"
-                  value={annualSpend}
+                  value={Number.isNaN(annualSpend) ? '' : annualSpend}
                   onChange={onNumber(setAnnualSpend)}
                   className="inline-block w-28 rounded-xl border-0 border-b-2 border-emerald-500 bg-slate-900/50 px-3 py-1 text-inherit focus:outline-none"
                 />

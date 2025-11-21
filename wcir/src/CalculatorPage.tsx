@@ -112,7 +112,7 @@ export function CalculatorPage(p: CalculatorPageProps) {
             <input
               type="number"
               className="w-full rounded-xl border border-slate-600 bg-slate-900 px-3 py-2 text-slate-100"
-              value={p.principal}
+              value={Number.isNaN(p.principal) ? '' : p.principal}
               onChange={p.onNumber(p.setPrincipal)}
             />
           </Field>
@@ -121,7 +121,7 @@ export function CalculatorPage(p: CalculatorPageProps) {
             <input
               type="number"
               className="w-full rounded-xl border border-slate-600 bg-slate-900 px-3 py-2 text-slate-100"
-              value={p.contribution}
+              value={Number.isNaN(p.contribution) ? '' : p.contribution}
               onChange={p.onNumber(p.setContribution)}
             />
           </Field>
@@ -130,17 +130,14 @@ export function CalculatorPage(p: CalculatorPageProps) {
             <input
               type="number"
               className="w-full rounded-xl border border-slate-600 bg-slate-900 px-3 py-2 text-slate-100"
-              value={p.nominalReturnPercent}
+              value={Number.isNaN(p.nominalReturnPercent) ? '' : p.nominalReturnPercent}
               onChange={(e) => {
                 p.setNominalReturnPercent(Number(e.target.value));
                 p.setReturnOverridden(true);
               }}
               onBlur={(e) => {
                 const val = Number(e.target.value);
-                if (!Number.isNaN(val)) {
-                  const rounded = Number(val.toFixed(2));
-                  p.setNominalReturnPercent(rounded);
-                }
+                if (!Number.isNaN(val)) p.setNominalReturnPercent(Number(val.toFixed(2)));
               }}
             />
           </Field>
@@ -149,7 +146,7 @@ export function CalculatorPage(p: CalculatorPageProps) {
             <input
               type="number"
               className="w-full rounded-xl border border-slate-600 bg-slate-900 px-3 py-2 text-slate-100"
-              value={p.inflationPercent}
+              value={Number.isNaN(p.inflationPercent) ? '' : p.inflationPercent}
               onChange={p.onNumber(p.setInflationPct)}
             />
           </Field>
@@ -158,7 +155,7 @@ export function CalculatorPage(p: CalculatorPageProps) {
             <input
               type="number"
               className="w-full rounded-xl border border-slate-600 bg-slate-900 px-3 py-2 text-slate-100"
-              value={p.annualSpend}
+              value={Number.isNaN(p.annualSpend) ? '' : p.annualSpend}
               onChange={p.onNumber(p.setAnnualSpend)}
             />
           </Field>
@@ -191,7 +188,7 @@ export function CalculatorPage(p: CalculatorPageProps) {
             <div className="mt-1 text-2xl font-semibold">
               {p.projected.hit ? `${p.projected.years}y ${p.projected.remMonths}m` : '>100y'}
             </div>
-            <div className="mt-1 text-xs text-slate-500">≈ {p.etaDate}</div>
+            <div className="mt-1 text-xs text-emerald-400">≈ {p.etaDate}</div>
           </div>
 
           <div className="rounded-2xl border border-slate-600 bg-slate-900 p-4">

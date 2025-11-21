@@ -29,9 +29,13 @@ const clampNum = (n: number, min = 0, max = Number.POSITIVE_INFINITY): number =>
   Number.isFinite(n) ? Math.min(Math.max(n, min), max) : 0;
 
 const toNumber = (v: string | number): number => {
-  if (typeof v === 'number') return Number.isFinite(v) ? v : 0;
+  if (typeof v === 'number') return v;
+
+  // Treat empty string as "no value"
+  if (v.trim() === '') return NaN;
+
   const n = Number(v);
-  return Number.isFinite(n) ? n : 0;
+  return n;
 };
 
 function useHashRoute(): string {
@@ -233,17 +237,34 @@ export default function HomePage() {
     // If user manually set the return, don't auto-update
     if (returnOverridden) return;
 
-    const total = (savings || 0) + (investments || 0);
+    // Prefer contributions for weighting
+    let savingsWeight = savingsContribution > 0 ? savingsContribution : 0;
+    let investmentWeight = investmentContribution > 0 ? investmentContribution : 0;
+    let total = savingsWeight + investmentWeight;
 
-    // Weight by balances if possible
+    // If no contributions at all, fall back to balances
+    if (total === 0) {
+      savingsWeight = savings > 0 ? savings : 0;
+      investmentWeight = investments > 0 ? investments : 0;
+      total = savingsWeight + investmentWeight;
+    }
+
+    // Compute weighted average if we have any weight
     if (total > 0 && (savingsReturnPercent > 0 || investmentReturnPercent > 0)) {
       const weighted =
-        ((savings || 0) * savingsReturnPercent + (investments || 0) * investmentReturnPercent) /
-        total;
+        (savingsWeight * savingsReturnPercent + investmentWeight * investmentReturnPercent) / total;
 
       setNominalReturnPercent(Number(weighted.toFixed(2)));
     }
-  }, [savings, investments, savingsReturnPercent, investmentReturnPercent, returnOverridden]);
+  }, [
+    savings,
+    investments,
+    savingsContribution,
+    investmentContribution,
+    savingsReturnPercent,
+    investmentReturnPercent,
+    returnOverridden,
+  ]);
 
   useEffect(() => {
     if (!isCalc) setReturnOverridden(false);
