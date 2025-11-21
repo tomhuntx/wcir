@@ -20,8 +20,12 @@ type IntroductionProps = {
   setCurrency: React.Dispatch<React.SetStateAction<CurrencyCode>>;
   savings: number;
   setSavings: React.Dispatch<React.SetStateAction<number>>;
+  savingsFrequency: string;
+  setSavingsFrequency: React.Dispatch<React.SetStateAction<string>>;
   investments: number;
   setInvestments: React.Dispatch<React.SetStateAction<number>>;
+  investmentFrequency: string;
+  setInvestmentFrequency: React.Dispatch<React.SetStateAction<string>>;
   savingsReturnPercent: number;
   setSavingsReturnPercent: React.Dispatch<React.SetStateAction<number>>;
   investmentReturnPercent: number;
@@ -88,8 +92,12 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
     setCurrency,
     savings,
     setSavings,
+    savingsFrequency,
+    setSavingsFrequency,
     investments,
     setInvestments,
+    investmentFrequency,
+    setInvestmentFrequency,
     savingsReturnPercent,
     setSavingsReturnPercent,
     investmentReturnPercent,
@@ -171,9 +179,9 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
             <Card className="h-full">
               <h3 className="text-xl font-semibold">What this service does</h3>
               <p className="mt-3 text-base text-slate-300">
-                This tool will guide you through a few human-friendly questions, then estimate when
-                your investments could sustainably fund your lifestyle. Everything runs on your
-                device. No accounts. No tracking.
+                This tool will guide you through a few simple questions to calculate how long it
+                will take for you to reach your goals. Everything runs on your device and your
+                session will be kept so you can come back any time.
               </p>
             </Card>
           </div>
@@ -191,7 +199,7 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
           </div>
 
           {step === 1 && (
-            <Card className="h-[18rem]">
+            <Card className="h-[20rem]">
               <h2 className="text-xl font-semibold text-slate-200">
                 Let’s start with your name and currency
               </h2>
@@ -223,7 +231,7 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
                   id="currency"
                   value={currency}
                   onChange={onCurrency}
-                  className="inline-block rounded-xl border-0 border-b-2 border-emerald-500 bg-slate-900/50 px-3 py-1 text-inherit focus:outline-none"
+                  className="inline-block rounded-xl border-0 border-b-2 border-emerald-500 bg-slate-900/50 px-3 py-2 text-inherit focus:outline-none"
                 >
                   <option value="AUD">AUD</option>
                   <option value="USD">USD</option>
@@ -250,12 +258,11 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
           )}
 
           {step === 2 && (
-            <Card className="h-[18rem]">
+            <Card className="h-[20rem]">
               <h2 className="text-sm font-semibold text-slate-400">
                 Your current savings & investments
               </h2>
 
-              {/* Inline conversational layout */}
               <div className="mt-4 flex flex-wrap items-baseline gap-x-2 gap-y-3 text-xl leading-relaxed text-slate-100">
                 <span>I currently have</span>
                 <input
@@ -285,7 +292,7 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
                     onChange={(e) => setSavingsReturnPercent(Number(e.target.value))}
                     className="ml-2 inline-block w-16 rounded-xl border-0 border-b-2 border-emerald-500 bg-slate-900/50 px-3 py-1 text-inherit focus:outline-none"
                   />
-                  % per year and my investments to make
+                  % of interest per year and my investments to grow an average of
                   <input
                     type="number"
                     value={investmentReturnPercent}
@@ -314,9 +321,11 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
           )}
 
           {step === 3 && (
-            <Card className="h-[21rem]">
-              <h2 className="text-xl font-semibold">Income & expenses</h2>
-
+            <Card className="h-[20rem] text-lg">
+              <h2 className="text-sm font-semibold text-slate-400">
+                Your current income & expenses
+              </h2>
+              {/* 
               <div className="mt-4 grid gap-4 sm:grid-cols-2">
                 <Field label="Contribution amount">
                   <input
@@ -326,20 +335,49 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
                     className="w-full rounded-xl border border-slate-600 bg-slate-900 px-3 py-2 text-slate-100"
                   />
                 </Field>
-                <Field label="Contribution frequency">
-                  <select
-                    value={contributionFrequency}
-                    onChange={(e) => setContributionFrequency(e.target.value)}
-                    className="w-full rounded-xl border border-slate-600 bg-slate-900 px-3 py-2 text-slate-100"
-                  >
-                    <option value="weekly">Weekly</option>
-                    <option value="fortnightly">Fortnightly</option>
-                    <option value="monthly">Monthly</option>
-                  </select>
-                </Field>
+              </div> */}
+
+              <div className="mt-4 flex flex-wrap items-baseline gap-x-2 gap-y-3 text-xl leading-relaxed text-slate-100">
+                <span>I set aside</span>
+                <input
+                  type="number"
+                  value={savings}
+                  onChange={(e) => setSavings(Number(e.target.value))}
+                  className="inline-block w-24 rounded-xl border-0 border-b-2 border-emerald-500 bg-slate-900/50 px-3 py-1 text-inherit focus:outline-none"
+                />
+                <span>per</span>
+                <select
+                  value={savingsFrequency}
+                  onChange={(e) => setSavingsFrequency(e.target.value)}
+                  className="inline-block rounded-xl border-0 border-b-2 border-emerald-500 bg-slate-900/50 px-3 py-2 text-inherit focus:outline-none"
+                >
+                  <option value="weekly">Week</option>
+                  <option value="fortnightly">Fortnight</option>
+                  <option value="monthly">Month</option>
+                </select>
+                <span>into my savings accounts.</span>
+              </div>
+              <div className="mt-4 flex flex-wrap items-baseline gap-x-2 gap-y-3 text-xl leading-relaxed text-slate-100">
+                <span>I make investment contributions of</span>
+                <input
+                  type="number"
+                  value={investments}
+                  onChange={(e) => setInvestments(Number(e.target.value))}
+                  className="inline-block w-24 rounded-xl border-0 border-b-2 border-emerald-500 bg-slate-900/50 px-3 py-1 text-inherit focus:outline-none"
+                />
+                <span>per</span>
+                <select
+                  value={investmentFrequency}
+                  onChange={(e) => setInvestmentFrequency(e.target.value)}
+                  className="inline-block rounded-xl border-0 border-b-2 border-emerald-500 bg-slate-900/50 px-3 py-2 text-inherit focus:outline-none"
+                >
+                  <option value="weekly">Week</option>
+                  <option value="fortnightly">Fortnight</option>
+                  <option value="monthly">Month</option>
+                </select>
               </div>
 
-              <div className="mt-auto flex items-center justify-between gap-3 pt-6">
+              <div className="mt-auto flex items-center justify-between gap-3 pt-6 text-base">
                 <button
                   onClick={() => setStep(2)}
                   className="rounded-lg border border-slate-700 bg-slate-800 px-4 py-2"
@@ -357,7 +395,7 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
           )}
 
           {step === 4 && (
-            <Card className="h-[21rem]">
+            <Card className="h-[20rem]">
               <h2 className="text-xl font-semibold">What lifestyle are you funding?</h2>
 
               <div className="mt-4 grid gap-4 sm:grid-cols-3">
@@ -402,10 +440,8 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
           )}
 
           {step === 5 && (
-            <Card className="h-[21rem]">
-              <h2 className="text-xl font-semibold">
-                {firstName ? `${firstName}, h` : 'H'}ere’s your rough timeline
-              </h2>
+            <Card className="h-[20rem]">
+              <h2 className="text-xl font-semibold">Here’s your rough timeline</h2>
               <p className="mt-1 text-sm text-slate-400">
                 Based on your inputs and real return of {percent(realR)}.
               </p>
