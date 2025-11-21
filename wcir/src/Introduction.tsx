@@ -73,13 +73,10 @@ const Card: React.FC<React.PropsWithChildren<{ className?: string }>> = ({
 
 export const Introduction: React.FC<IntroductionProps> = (props) => {
   const {
-    appName,
     step,
     setStep,
     firstName,
-    setFirstName,
     currency,
-    setCurrency,
     savings,
     setSavings,
     savingsContribution,
@@ -96,14 +93,6 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
     setSavingsReturnPercent,
     investmentReturnPercent,
     setInvestmentReturnPercent,
-    contribution,
-    setContribution,
-    contributionFrequency,
-    setContributionFrequency,
-    nominalReturnPercent,
-    setNominalReturnPercent,
-    inflationPercent,
-    setInflationPct,
     annualSpend,
     setAnnualSpend,
     targetNestEgg,
