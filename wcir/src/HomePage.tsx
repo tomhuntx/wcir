@@ -99,7 +99,7 @@ export default function HomePage() {
 
   // Routing: embed calculator in main content vs. welcome flow
   const route = useHashRoute();
-  const isCalc = route === '/calculator';
+  const isCalc = route.startsWith('/calculator');
 
   // Minimal, non-personal local memory of first name
   const [firstName, setFirstName] = useState<string>('');
@@ -136,54 +136,12 @@ export default function HomePage() {
   const [nominalReturnPercent, setNominalReturnPercent] = useState<number>(8);
   const [inflationPercent, setInflationPct] = useState<number>(2.5);
   const [annualSpend, setAnnualSpend] = useState<number>(40000);
+  const [returnOverridden, setReturnOverridden] = useState(false);
 
-  // Override principle if investments or savings is set
-  useEffect(() => {
-    if (investments > 0 || savings > 0) {
-      setPrincipal(0);
-    }
-  }, [investments, savings]);
-
-  // Override return percent if investments or savings is set
-  useEffect(() => {
-    // Only auto-zero the calculator return while in the wizard mode
-    if (!isCalc && (savingsReturnPercent > 0 || investmentReturnPercent > 0)) {
-      setNominalReturnPercent(0);
-    }
-  }, [savingsReturnPercent, investmentReturnPercent, isCalc]);
-
-  // 1) Pick an effective nominal return based on "mode":
-  //    - If user entered separate savings/investment returns -> blend them
-  //    - Else fall back to the direct calculator nominalReturnPercent
-  const effectiveNominalReturnPercent = useMemo(() => {
-    const hasSplitReturns = savingsReturnPercent > 0 || investmentReturnPercent > 0;
-
-    if (hasSplitReturns) {
-      const totalBalance = (savings || 0) + (investments || 0);
-
-      if (totalBalance > 0) {
-        // Balance-weighted average of savings & investments returns
-        return (
-          ((savings || 0) * savingsReturnPercent + (investments || 0) * investmentReturnPercent) /
-          totalBalance
-        );
-      }
-
-      // If no balances yet, just average the non-zero rates
-      const rates: number[] = [];
-      if (savingsReturnPercent > 0) rates.push(savingsReturnPercent);
-      if (investmentReturnPercent > 0) rates.push(investmentReturnPercent);
-      return rates.length ? rates.reduce((a, b) => a + b, 0) / rates.length : 0;
-    }
-
-    // Calculator mode: use the direct nominal return the user typed
-    return nominalReturnPercent;
-  }, [savings, investments, savingsReturnPercent, investmentReturnPercent, nominalReturnPercent]);
-
-  // 2) Real return after inflation (decimal, e.g. 0.05 for 5%)
+  // Real return after inflation (decimal, e.g. 0.05 for 5%)
   const realR = useMemo<number>(
-    () => realReturn(effectiveNominalReturnPercent, inflationPercent),
-    [effectiveNominalReturnPercent, inflationPercent],
+    () => realReturn(nominalReturnPercent, inflationPercent),
+    [nominalReturnPercent, inflationPercent],
   );
 
   // 3) Target nest egg based on annualSpend and a withdrawal rate
@@ -237,6 +195,54 @@ export default function HomePage() {
     (e) =>
       setter(toNumber(e.target.value));
 
+  const frequencyToMonthly = (amount: number, freq: string): number => {
+    if (!amount) return 0;
+    switch (freq) {
+      case 'weekly':
+        return (amount * 52) / 12;
+      case 'fortnightly':
+        return (amount * 26) / 12;
+      case 'monthly':
+      default:
+        return amount;
+    }
+  };
+
+  useEffect(() => {
+    if (isCalc) return;
+    const totalBalances = (savings || 0) + (investments || 0);
+    setPrincipal(totalBalances);
+  }, [savings, investments, isCalc]);
+
+  // Drive "Monthly contribution" from the savings/investment contribution inputs (step 3)
+  useEffect(() => {
+    if (isCalc) return;
+    const monthlyFromSavings = frequencyToMonthly(savings || 0, savingsFrequency);
+    const monthlyFromInvestments = frequencyToMonthly(investments || 0, investmentFrequency);
+    setContribution(monthlyFromSavings + monthlyFromInvestments);
+  }, [savings, investments, savingsFrequency, investmentFrequency, isCalc]);
+
+  // Drive "Expected annual return (%)" from savings + investment returns
+  useEffect(() => {
+    // If user manually set the return, don't auto-update
+    if (returnOverridden) return;
+
+    const total = (savings || 0) + (investments || 0);
+
+    // Weight by balances if possible
+    if (total > 0 && (savingsReturnPercent > 0 || investmentReturnPercent > 0)) {
+      const weighted =
+        ((savings || 0) * savingsReturnPercent + (investments || 0) * investmentReturnPercent) /
+        total;
+
+      setNominalReturnPercent(weighted);
+    }
+  }, [savings, investments, savingsReturnPercent, investmentReturnPercent, returnOverridden]);
+
+  useEffect(() => {
+    if (!isCalc) setReturnOverridden(false);
+  }, [isCalc]);
+
   return (
     <div className="flex min-h-screen flex-col bg-slate-900 text-slate-100">
       {/* Top banner */}
@@ -268,11 +274,11 @@ export default function HomePage() {
             }}
             currency={currency}
             setCurrency={setCurrency}
-            principal={principal || savings + investments}
+            principal={principal}
             setPrincipal={setPrincipal}
             contribution={contribution}
             setContribution={setContribution}
-            nominalReturnPercent={effectiveNominalReturnPercent}
+            nominalReturnPercent={nominalReturnPercent}
             setNominalReturnPercent={setNominalReturnPercent}
             inflationPercent={inflationPercent}
             setInflationPct={setInflationPct}
@@ -284,6 +290,7 @@ export default function HomePage() {
             etaDate={etaDate}
             onCurrency={onCurrency}
             onNumber={onNumber}
+            setReturnOverridden={setReturnOverridden}
           />
         ) : (
           <Introduction

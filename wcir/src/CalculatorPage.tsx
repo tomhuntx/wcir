@@ -37,6 +37,8 @@ export interface CalculatorPageProps {
   annualSpend: number;
   setAnnualSpend: React.Dispatch<React.SetStateAction<number>>;
 
+  setReturnOverridden: React.Dispatch<React.SetStateAction<boolean>>;
+
   // derived values (already computed in HomePage)
   targetNestEgg: number;
   projected: TargetResult;
@@ -128,8 +130,18 @@ export function CalculatorPage(p: CalculatorPageProps) {
             <input
               type="number"
               className="w-full rounded-xl border border-slate-600 bg-slate-900 px-3 py-2 text-slate-100"
-              value={p.nominalReturnPercent}
-              onChange={p.onNumber(p.setNominalReturnPercent)}
+              value={p.nominalReturnPercent.toFixed(2)}
+              onChange={(e) => {
+                p.setNominalReturnPercent(Number(e.target.value));
+                p.setReturnOverridden(true);
+              }}
+              onBlur={(e) => {
+                const val = Number(e.target.value);
+                if (!Number.isNaN(val)) {
+                  const rounded = Number(val.toFixed(2));
+                  p.setNominalReturnPercent(rounded);
+                }
+              }}
             />
           </Field>
 
