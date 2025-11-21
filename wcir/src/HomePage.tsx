@@ -120,7 +120,7 @@ export default function HomePage() {
   }, [firstName]);
 
   // Wizard state
-  const [step, setStep] = useState<number>(0); // 0: welcome; 1..5 steps
+  const [step, setStep] = useState<number>(0);
   const [currency, setCurrency] = useState<CurrencyCode>('AUD');
 
   // Inputs gathered step-by-step
@@ -213,7 +213,7 @@ export default function HomePage() {
   useEffect(() => {
     if (isCalc) return;
     const totalBalances = (savings || 0) + (investments || 0);
-    setPrincipal(totalBalances);
+    setPrincipal(Number(totalBalances.toFixed(2)));
   }, [savings, investments, isCalc]);
 
   // Drive "Monthly contribution" from the savings/investment contribution inputs (step 3)
@@ -225,7 +225,7 @@ export default function HomePage() {
       investmentFrequency,
     );
 
-    setContribution(monthlyFromSavings + monthlyFromInvestments);
+    setContribution(Number((monthlyFromSavings + monthlyFromInvestments).toFixed(2)));
   }, [savingsContribution, investmentContribution, savingsFrequency, investmentFrequency, isCalc]);
 
   // Drive "Expected annual return (%)" from savings + investment returns
@@ -241,7 +241,7 @@ export default function HomePage() {
         ((savings || 0) * savingsReturnPercent + (investments || 0) * investmentReturnPercent) /
         total;
 
-      setNominalReturnPercent(weighted);
+      setNominalReturnPercent(Number(weighted.toFixed(2)));
     }
   }, [savings, investments, savingsReturnPercent, investmentReturnPercent, returnOverridden]);
 
@@ -254,7 +254,13 @@ export default function HomePage() {
       {/* Top banner */}
       <div className="w-full bg-slate-950 text-white">
         <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-6 py-3">
-          <div className="flex items-center gap-2" onClick={() => (window.location.href = '/')}>
+          <div
+            className="flex items-center gap-2"
+            onClick={() => {
+              window.location.hash = '#/';
+              setStep(0);
+            }}
+          >
             <div className="grid h-7 w-7 place-items-center rounded-xl bg-white/10 font-bold">
               ?
             </div>

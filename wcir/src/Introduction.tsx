@@ -390,7 +390,7 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
             <Card className="h-[20rem]">
               <h2 className="text-sm font-semibold text-slate-400">Your retirement goals</h2>
 
-              <div className="mt-4 flex flex-wrap items-baseline gap-x-2 gap-y-3 text-xl leading-relaxed text-slate-100">
+              <div className="mt-4 flex flex-wrap items-baseline gap-x-2 text-xl leading-relaxed text-slate-100">
                 <span>I predict my yearly expenses when I retire will be roughly</span>
                 <input
                   type="number"
