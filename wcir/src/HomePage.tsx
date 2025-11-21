@@ -97,6 +97,10 @@ function yearsToTarget({
 export default function HomePage() {
   const appName = 'WCIR';
 
+  // Routing: embed calculator in main content vs. welcome flow
+  const route = useHashRoute();
+  const isCalc = route === '/calculator';
+
   // Minimal, non-personal local memory of first name
   const [firstName, setFirstName] = useState<string>('');
   useEffect(() => {
@@ -132,7 +136,6 @@ export default function HomePage() {
   const [nominalReturnPercent, setNominalReturnPercent] = useState<number>(8);
   const [inflationPercent, setInflationPct] = useState<number>(2.5);
   const [annualSpend, setAnnualSpend] = useState<number>(40000);
-  const [withdrawalPct, setWithdrawalPct] = useState<number>(4);
 
   // Override principle if investments or savings is set
   useEffect(() => {
@@ -143,21 +146,62 @@ export default function HomePage() {
 
   // Override return percent if investments or savings is set
   useEffect(() => {
-    if (savingsReturnPercent > 0 || investmentReturnPercent > 0) {
+    // Only auto-zero the calculator return while in the wizard mode
+    if (!isCalc && (savingsReturnPercent > 0 || investmentReturnPercent > 0)) {
       setNominalReturnPercent(0);
     }
-  }, [savingsReturnPercent, investmentReturnPercent]);
+  }, [savingsReturnPercent, investmentReturnPercent, isCalc]);
 
-  // Derived
-  const targetNestEgg = useMemo<number>(() => {
-    const wr = clampNum(withdrawalPct, 0.1, 10) / 100; // 0.1%..10%
-    return (annualSpend || 0) / (wr || 0.0001);
-  }, [annualSpend, withdrawalPct]);
+  // 1) Pick an effective nominal return based on "mode":
+  //    - If user entered separate savings/investment returns -> blend them
+  //    - Else fall back to the direct calculator nominalReturnPercent
+  const effectiveNominalReturnPercent = useMemo(() => {
+    const hasSplitReturns = savingsReturnPercent > 0 || investmentReturnPercent > 0;
 
+    if (hasSplitReturns) {
+      const totalBalance = (savings || 0) + (investments || 0);
+
+      if (totalBalance > 0) {
+        // Balance-weighted average of savings & investments returns
+        return (
+          ((savings || 0) * savingsReturnPercent + (investments || 0) * investmentReturnPercent) /
+          totalBalance
+        );
+      }
+
+      // If no balances yet, just average the non-zero rates
+      const rates: number[] = [];
+      if (savingsReturnPercent > 0) rates.push(savingsReturnPercent);
+      if (investmentReturnPercent > 0) rates.push(investmentReturnPercent);
+      return rates.length ? rates.reduce((a, b) => a + b, 0) / rates.length : 0;
+    }
+
+    // Calculator mode: use the direct nominal return the user typed
+    return nominalReturnPercent;
+  }, [savings, investments, savingsReturnPercent, investmentReturnPercent, nominalReturnPercent]);
+
+  // 2) Real return after inflation (decimal, e.g. 0.05 for 5%)
   const realR = useMemo<number>(
-    () => realReturn(nominalReturnPercent, inflationPercent),
-    [nominalReturnPercent, inflationPercent],
+    () => realReturn(effectiveNominalReturnPercent, inflationPercent),
+    [effectiveNominalReturnPercent, inflationPercent],
   );
+
+  // 3) Target nest egg based on annualSpend and a withdrawal rate
+  //    derived from the real return (with sensible clamps)
+  const targetNestEgg = useMemo<number>(() => {
+    if (!annualSpend) return 0;
+
+    if (!Number.isFinite(realR) || realR <= 0) {
+      // If real return is zero/negative, there's no sustainable withdrawal
+      return Infinity;
+    }
+
+    // Use the real return as a proxy for sustainable withdrawal rate,
+    // but clamp it to something like 0.1%–10% to avoid silly extremes.
+    const withdrawalRateDecimal = clampNum(realR, 0.001, 0.1); // 0.1%..10%
+
+    return annualSpend / withdrawalRateDecimal;
+  }, [annualSpend, realR]);
 
   const projection = useMemo<TargetResult>(
     () =>
@@ -192,10 +236,6 @@ export default function HomePage() {
     ): React.ChangeEventHandler<HTMLInputElement> =>
     (e) =>
       setter(toNumber(e.target.value));
-
-  // Routing: embed calculator in main content vs. welcome flow
-  const route = useHashRoute();
-  const isCalc = route === '/calculator';
 
   return (
     <div className="flex min-h-screen flex-col bg-slate-900 text-slate-100">
@@ -232,16 +272,12 @@ export default function HomePage() {
             setPrincipal={setPrincipal}
             contribution={contribution}
             setContribution={setContribution}
-            nominalReturnPercent={
-              nominalReturnPercent || savingsReturnPercent + investmentReturnPercent
-            }
+            nominalReturnPercent={effectiveNominalReturnPercent}
             setNominalReturnPercent={setNominalReturnPercent}
             inflationPercent={inflationPercent}
             setInflationPct={setInflationPct}
             annualSpend={annualSpend}
             setAnnualSpend={setAnnualSpend}
-            withdrawalPct={withdrawalPct}
-            setWithdrawalPct={setWithdrawalPct}
             targetNestEgg={targetNestEgg}
             projected={projection}
             realR={realR}
@@ -280,8 +316,6 @@ export default function HomePage() {
             setInflationPct={setInflationPct}
             annualSpend={annualSpend}
             setAnnualSpend={setAnnualSpend}
-            withdrawalPct={withdrawalPct}
-            setWithdrawalPct={setWithdrawalPct}
             targetNestEgg={targetNestEgg}
             realR={realR}
             projection={projection}

@@ -40,8 +40,6 @@ type IntroductionProps = {
   setInflationPct: React.Dispatch<React.SetStateAction<number>>;
   annualSpend: number;
   setAnnualSpend: React.Dispatch<React.SetStateAction<number>>;
-  withdrawalPct: number;
-  setWithdrawalPct: React.Dispatch<React.SetStateAction<number>>;
   targetNestEgg: number;
   realR: number;
   projection: TargetResult;
@@ -112,8 +110,6 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
     setInflationPct,
     annualSpend,
     setAnnualSpend,
-    withdrawalPct,
-    setWithdrawalPct,
     targetNestEgg,
     realR,
     projection,
@@ -396,30 +392,17 @@ export const Introduction: React.FC<IntroductionProps> = (props) => {
 
           {step === 4 && (
             <Card className="h-[20rem]">
-              <h2 className="text-xl font-semibold">What lifestyle are you funding?</h2>
+              <h2 className="text-sm font-semibold text-slate-400">Your retirement goals</h2>
 
-              <div className="mt-4 grid gap-4 sm:grid-cols-3">
-                <Field label="Annual spend in retirement">
-                  <input
-                    type="number"
-                    value={annualSpend}
-                    onChange={onNumber(setAnnualSpend)}
-                    className="w-full rounded-xl border border-slate-600 bg-slate-900 px-3 py-2 text-slate-100"
-                  />
-                </Field>
-                <Field label="Withdrawal rate (%)" hint="Common rule-of-thumb ≈ 4%">
-                  <input
-                    type="number"
-                    value={withdrawalPct}
-                    onChange={onNumber(setWithdrawalPct)}
-                    className="w-full rounded-xl border border-slate-600 bg-slate-900 px-3 py-2 text-slate-100"
-                  />
-                </Field>
-                <Field label="Target (in today's dollars)">
-                  <div className="rounded-xl border border-slate-600 bg-slate-900 px-3 py-2 text-slate-100">
-                    {currencyFormat(targetNestEgg, currency)}
-                  </div>
-                </Field>
+              <div className="mt-4 flex flex-wrap items-baseline gap-x-2 gap-y-3 text-xl leading-relaxed text-slate-100">
+                <span>I predict my yearly expenses when I retire will be roughly</span>
+                <input
+                  type="number"
+                  value={annualSpend}
+                  onChange={onNumber(setAnnualSpend)}
+                  className="inline-block w-28 rounded-xl border-0 border-b-2 border-emerald-500 bg-slate-900/50 px-3 py-1 text-inherit focus:outline-none"
+                />
+                <span>per year in today's dollars.</span>
               </div>
 
               <div className="mt-auto flex items-center justify-between gap-3 pt-6">

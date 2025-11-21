@@ -37,9 +37,6 @@ export interface CalculatorPageProps {
   annualSpend: number;
   setAnnualSpend: React.Dispatch<React.SetStateAction<number>>;
 
-  withdrawalPct: number;
-  setWithdrawalPct: React.Dispatch<React.SetStateAction<number>>;
-
   // derived values (already computed in HomePage)
   targetNestEgg: number;
   projected: TargetResult;
@@ -83,7 +80,7 @@ const Field: React.FC<{ label: string; hint?: string; children: React.ReactNode 
 );
 
 export function CalculatorPage(p: CalculatorPageProps) {
-  const { showBack = false, title = 'Full Calculator' } = p;
+  const { showBack = false } = p;
 
   return (
     <section className="mx-auto w-3xl px-6 py-8">
@@ -99,13 +96,14 @@ export function CalculatorPage(p: CalculatorPageProps) {
         ) : (
           <span />
         )}
-        <div className="text-sm text-slate-400">{title}</div>
       </div>
 
       {/* Inputs */}
       <div className="rounded-2xl border border-slate-700 bg-slate-800 p-6 shadow-sm">
         <h3 className="text-xl font-semibold">Calculator</h3>
-        <p className="mt-1 text-sm text-slate-400">Tweak any value and watch results update.</p>
+        <p className="mt-1 text-sm text-slate-400">
+          Discover how small changes to your financial plan can accelerate your retirement journey.
+        </p>
 
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
           <Field label="Initial amount">
@@ -135,7 +133,7 @@ export function CalculatorPage(p: CalculatorPageProps) {
             />
           </Field>
 
-          <Field label="Inflation (%)">
+          <Field label="Average inflation rate (%)">
             <input
               type="number"
               className="w-full rounded-xl border border-slate-600 bg-slate-900 px-3 py-2 text-slate-100"
@@ -150,15 +148,6 @@ export function CalculatorPage(p: CalculatorPageProps) {
               className="w-full rounded-xl border border-slate-600 bg-slate-900 px-3 py-2 text-slate-100"
               value={p.annualSpend}
               onChange={p.onNumber(p.setAnnualSpend)}
-            />
-          </Field>
-
-          <Field label="Withdrawal rate (%)" hint="Common rule-of-thumb ≈ 4%">
-            <input
-              type="number"
-              className="w-full rounded-xl border border-slate-600 bg-slate-900 px-3 py-2 text-slate-100"
-              value={p.withdrawalPct}
-              onChange={p.onNumber(p.setWithdrawalPct)}
             />
           </Field>
 
